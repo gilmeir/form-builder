@@ -34,7 +34,8 @@
     "react": "15.6.1",
     "react-dom": "15.6.1",
     "react-router": "^4.3.1",
-    "react-router-dom": "^4.3.1"
+    "react-router-dom": "^4.3.1",
+    "wix-style-react": "^6.3.0"
   },
   "lint-staged": {
     "*.{js,scss,less}": "yoshi lint"
