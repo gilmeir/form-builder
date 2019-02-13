@@ -14,7 +14,13 @@ const App = () => (
         />
 
         <Route
+          exact
+          path="/"
           component={FormsList}
+        />
+
+        <Route
+          component={() => (<h1 style={{textAlign: 'center'}}>Page not found 😳</h1>)}
         />
       </Switch>
     </BrowserRouter>
