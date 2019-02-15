@@ -1,17 +1,64 @@
 import React from 'react';
-import Table from 'wix-style-react/Table';
 import { Link } from 'react-router-dom';
+import Table from 'wix-style-react/Table';
+import Loader from 'wix-style-react/Loader';
+import Box from 'wix-style-react/Box';
 import { formSubmitUrl, formSubmissionsUrl } from '../../routes/routes';
 
-const FormsList = () => (
-  <div>
-    <Table
-      data={tableData}
-      itemsPerPage={20}
-      columns={columns}
-    />
-  </div>
-);
+class FormsList extends React.Component {
+  state = {
+    forms: [],
+    error: undefined,
+    loading: false,
+  };
+
+  componentDidMount() {
+    const { getForms } = this.props;
+
+    getForms()
+      .then(forms => this.setState({
+        forms,
+        loading: false,
+      }))
+      .catch(() => this.setState({error: 'Failed retrieving your forms'}));
+    this.setState({loading: true});
+  }
+
+  render() {
+    const {
+      forms,
+      error,
+      loading,
+    } = this.state;
+
+    return (
+      <Box
+        align="center"
+        margin="50px"
+        direction="vertical"
+      >
+        <Box>
+          <Table
+            data={forms}
+            itemsPerPage={20}
+            columns={columns}
+            showHeaderWhenEmpty
+          />
+        </Box>
+
+        {
+          loading &&
+          <Box marginTop="15px">
+            <Loader
+              status={error ? 'error' : 'loading'}
+              text={error ? 'Failed loading your forms' : 'Loading your forms'}
+            />
+          </Box>
+        }
+      </Box>
+    )
+  }
+}
 
 const columns = [
   {
@@ -38,19 +85,6 @@ const columns = [
     title: 'Submissions Page',
     align: 'center',
     render: row => <Link to={formSubmissionsUrl(row.id)}>View</Link>,
-  },
-];
-
-const tableData = [
-  {
-    id: 1,
-    name: 'Task Feedback',
-    numSubmissions: 0,
-  },
-  {
-    id: 2,
-    name: 'Job Application',
-    numSubmissions: 152,
   },
 ];
 

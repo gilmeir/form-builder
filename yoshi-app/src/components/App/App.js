@@ -5,6 +5,7 @@ import styles from './App.scss';
 import * as routes from '../../routes/routes';
 import FormsList from '../FormsList/FormsList';
 import FormBuilder from '../FormBuilder/FormBuilder';
+import * as formsActions from '../../actions/forms';
 
 const App = () => (
   <div className={styles.app}>
@@ -12,18 +13,18 @@ const App = () => (
       <Switch>
         <Route
           path={routes.list}
-          component={FormsList}
+          render={() => <FormsList getForms={formsActions.getForms}/>}
         />
 
         <Route
           path={routes.builder}
-          component={FormBuilder}
+          render={() => <FormBuilder saveForm={formsActions.saveForm}/>}
         />
 
         <Route
           exact
           path={routes.root}
-          component={FormsList}
+          render={() => <FormsList getForms={formsActions.getForms}/>}
         />
 
         <Route
