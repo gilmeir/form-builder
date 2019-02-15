@@ -1,0 +1,12 @@
+.input {
+  margin-bottom: 10px;
+}
+
+.buttons-container {
+  margin-top: 15px;
+  text-align: center;
+
+  & *:not(:last-child) {
+    margin-right: 10px;
+  }
+}
