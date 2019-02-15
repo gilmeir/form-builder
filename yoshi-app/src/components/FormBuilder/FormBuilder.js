@@ -3,10 +3,9 @@ import Card from 'wix-style-react/Card';
 import Button from 'wix-style-react/Button';
 import Add from 'wix-style-react/new-icons/Add';
 import EmptyState from 'wix-style-react/EmptyState';
-import Input from 'wix-style-react/Input';
-import Label from 'wix-style-react/Label';
 import NewFieldSelection from '../NewFieldSelection/NewFieldSelection';
 import { validateFieldParam } from './helpers';
+import Form from '../Form/Form';
 
 class FormBuilder extends React.Component {
   state = {
@@ -20,25 +19,16 @@ class FormBuilder extends React.Component {
     });
   }
 
-  hasErrors() {
-    const { formFields } = this.state;
-    return formFields.filter(field => field.error).length > 0;
-  }
-
   addField(field) {
     const { formFields } = this.state;
 
-    const hasErrors = this.hasErrors();
-
-    if (!hasErrors) {
-      this.setState({
-        formFields: [
-          ...formFields,
-          field
-        ],
-        showNewFieldSelection: false,
-      })
-    }
+    this.setState({
+      formFields: [
+        ...formFields,
+        field
+      ],
+      showNewFieldSelection: false,
+    })
   }
 
   isValidFieldParam(paramName, paramValue) {
@@ -69,34 +59,6 @@ class FormBuilder extends React.Component {
         throw new Error('Invalid field');
     }
   };
-
-  renderFields() {
-    const { formFields } = this.state;
-
-    return (
-      <div style={{marginBottom: '15px'}}>
-        {
-          formFields.map(({type, name, label}) => {
-            const inputId = generateInputId({type, name, label});
-            return (
-              <div key={inputId}>
-                <Label>
-                  {label}
-                </Label>
-                <Input
-                  id={inputId}
-                  type={type}
-                  name={name}
-                  readonly
-                  disabled
-                />
-              </div>
-            );
-          })
-        }
-      </div>
-    )
-  }
 
   hideNewFieldSelection() {
     this.setState({showNewFieldSelection: false});
@@ -132,7 +94,6 @@ class FormBuilder extends React.Component {
                 onAdd={field => this.addField(field)}
                 onCancel={() => this.hideNewFieldSelection()}
                 isValidFieldParam={(name, value) => this.isValidFieldParam(name, value)}
-                hasErrors={this.hasErrors()}
               />
             </div>
           }
@@ -147,7 +108,7 @@ class FormBuilder extends React.Component {
                 />
               )
               : <div style={{marginBottom: 15}}>
-                  { this.renderFields() }
+                  <Form fields={formFields}/>
                 </div>
           }
         </Card.Content>
@@ -155,7 +116,5 @@ class FormBuilder extends React.Component {
     );
   }
 }
-
-const generateInputId = ({name, label, type}) => `${name}-${label}-${type}`;
 
 export default FormBuilder;

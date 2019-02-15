@@ -7,7 +7,20 @@ import FormField from 'wix-style-react/FormField';
 import styles from './NewFieldSelection.scss';
 
 class NewFieldSelection extends React.Component {
-  state = getInitialState();
+  state = {
+    label: {
+      value: '',
+      error: undefined,
+    },
+    name: {
+      value: '',
+      error: undefined,
+    },
+    type: {
+      value: fieldTypes[0],
+      error: undefined,
+    },
+  };
 
   updateParam(paramName, paramValue) {
     const { isValidFieldParam } = this.props;
@@ -22,16 +35,33 @@ class NewFieldSelection extends React.Component {
     })
   }
 
+  getParamsErrors() {
+    const { isValidFieldParam } = this.props;
+    const params = this.state;
+
+    return Object.keys(params).reduce(
+      (paramsErrors, fieldName) => ({
+        ...paramsErrors,
+        [fieldName]: isValidFieldParam(fieldName, params[fieldName].value)
+      }),
+      {},
+    );
+  }
+
   handleSubmit(e) {
     e.preventDefault();
 
-    const { type, name, label } = this.state;
+    const params = this.state;
+    const paramsErrors = this.getParamsErrors();
+    const hasErrors = Object.keys(paramsErrors).some(e => paramsErrors[e]);
 
-    this.props.onAdd({
-      type: type.value,
-      name: name.value,
-      label: label.value,
-    });
+    if (hasErrors) {
+      const stateWithNewErrors = updateErrorsInParams(params, paramsErrors);
+      this.setState(stateWithNewErrors);
+    } else {
+      const paramsValues = getParamsValues(params);
+      this.props.onAdd(paramsValues);
+    }
   }
 
   handleCancel() {
@@ -40,7 +70,6 @@ class NewFieldSelection extends React.Component {
 
   render() {
     const { label, name, type } = this.state;
-    const { hasErrors } = this.props;
 
     return (
       <div style={{border: '0.5px solid gray', borderRadius: '20px', padding: '25px'}}>
@@ -92,7 +121,6 @@ class NewFieldSelection extends React.Component {
           <div className={styles.buttonsContainer}>
             <Button
               type="submit"
-              disabled={hasErrors}
               tabIndex={4}
             >
               Add
@@ -124,21 +152,20 @@ const fieldTypesOptions = fieldTypes.map(fieldType => ({
   value: fieldType,
 }));
 
-const getInitialState = () => {
-  return {
-    label: {
-      value: '',
-      error: undefined,
-    },
-    name: {
-      value: '',
-      error: undefined,
-    },
-    type: {
-      value: fieldTypes[0],
-      error: undefined,
-    },
-  };
-};
+const updateErrorsInParams = (params, paramsErrors) =>
+  Object.keys(paramsErrors).reduce(
+    (acc, paramName) => ({
+      ...acc,
+      [paramName]: {
+        ...params[paramName],
+        error: paramsErrors[paramName],
+      }
+    }), {});
+
+const getParamsValues = params =>
+  Object.keys(params).reduce((acc, paramName) => ({
+    ...acc,
+    [paramName]: params[paramName].value,
+  }), {});
 
 export default NewFieldSelection;
