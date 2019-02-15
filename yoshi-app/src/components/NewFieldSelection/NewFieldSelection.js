@@ -5,6 +5,8 @@ import Button from 'wix-style-react/Button';
 import Heading from 'wix-style-react/Heading';
 import FormField from 'wix-style-react/FormField';
 import styles from './NewFieldSelection.scss';
+import Modal from 'wix-style-react/Modal';
+import { MessageBoxFunctionalLayout } from 'wix-style-react/MessageBox';
 
 class NewFieldSelection extends React.Component {
   state = {
@@ -72,68 +74,59 @@ class NewFieldSelection extends React.Component {
     const { label, name, type } = this.state;
 
     return (
-      <div style={{border: '0.5px solid gray', borderRadius: '20px', padding: '25px'}}>
-        <form onSubmit={e => this.handleSubmit(e)}>
-          <div style={{marginBottom: 10}}>
-            <Heading appearance="H4">
-              Fill in the field details:
-            </Heading>
-          </div>
-
-          <FormField
-            label="Label"
-          >
-            <Input
-              type="text"
-              tabIndex={1}
-              onChange={e => this.updateParam('label', e.target.value.trim())}
-              status={label.error && 'error'}
-              statusMessage={label.error}
-              value={label.value}
-              autoFocus
-              className={styles.input}
-            />
-          </FormField>
-
-          <FormField
-            label="Name"
-          >
-            <Input
-              type="text"
-              tabIndex={2}
-              onChange={e => this.updateParam('name', e.target.value.trim())}
-              status={name.error && 'error'}
-              statusMessage={name.error}
-              value={name.value}
-              className={styles.input}
-            />
-          </FormField>
-
-          <FormField label="Type">
-            <Dropdown
-              tabIndex={3}
-              options={fieldTypesOptions}
-              onSelect={option => this.updateParam('type', option.id)}
-              selectedId={(fieldTypesOptions.filter(fieldType => fieldType.id === type.value).pop() || {}).id}
-            />
-          </FormField>
-
-          <div className={styles.buttonsContainer}>
-            <Button
-              type="submit"
-              tabIndex={4}
+      <Modal
+        isOpen={true}
+        shouldCloseOnOverlayClick={false}
+        shouldDisplayCloseButton
+      >
+        <MessageBoxFunctionalLayout
+          title="Fill in the field details"
+          confirmText="Add"
+          cancelText="Cancel"
+          onCancel={() => this.handleCancel()}
+          onOk={(e) => this.handleSubmit(e)}
+        >
+          <form onSubmit={e => this.handleSubmit(e)}>
+            <FormField
+              label="Label"
             >
-              Add
-            </Button>
-            <Button
-              onClick={() => this.handleCancel()}
-              tabIndex={5}
+              <Input
+                type="text"
+                tabIndex={1}
+                onChange={e => this.updateParam('label', e.target.value.trim())}
+                status={label.error && 'error'}
+                statusMessage={label.error}
+                value={label.value}
+                autoFocus
+                className={styles.input}
+              />
+            </FormField>
+
+            <FormField
+              label="Name"
             >
-              Cancel
-            </Button>
-          </div>
-        </form>
-      </div>
+              <Input
+                type="text"
+                tabIndex={2}
+                onChange={e => this.updateParam('name', e.target.value.trim())}
+                status={name.error && 'error'}
+                statusMessage={name.error}
+                value={name.value}
+                className={styles.input}
+              />
+            </FormField>
+
+            <FormField label="Type">
+              <Dropdown
+                tabIndex={3}
+                options={fieldTypesOptions}
+                onSelect={option => this.updateParam('type', option.id)}
+                selectedId={(fieldTypesOptions.filter(fieldType => fieldType.id === type.value).pop() || {}).id}
+              />
+            </FormField>
+          </form>
+        </MessageBoxFunctionalLayout>
+      </Modal>
     )
   }
 }

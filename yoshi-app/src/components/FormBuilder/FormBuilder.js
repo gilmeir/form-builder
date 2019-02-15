@@ -73,7 +73,7 @@ class FormBuilder extends React.Component {
     return (
       <Card>
         <Card.Header
-          title='Build Your Form'
+          title='Add Fields To Your Form'
           suffix={
             <Button
               tabIndex={0}
@@ -104,7 +104,7 @@ class FormBuilder extends React.Component {
                 !showNewFieldSelection &&
                 <EmptyState
                   title={"You haven't added any fields yet"}
-                  subtitle={"Add fields to your form easily by hitting the Add button"}
+                  subtitle={"Add fields to your form easily by hitting the New Field button"}
                 />
               )
               : <div style={{marginBottom: 15}}>
