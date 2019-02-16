@@ -5,6 +5,7 @@
 
   },
   "locale": "en",
+  "serverUrl": "//localhost:3000/",
   "basename": "/",
   "clientTopology": {
     "staticsDomain": "static.parastorage.com",

@@ -9,8 +9,9 @@
   },
   "scripts": {
     "firebase-build": "yoshi build && node ./generateHtml.js",
-    "firebase-local": "firebase serve --only hosting --port 5000",
-    "firebase-deploy": "NODE_ENV=production npm run firebase-build && firebase deploy",
+    "firebase-serve": "firebase serve",
+    "firebase-deploy": "NODE_ENV=production npm run firebase-build && firebase deploy --only hosting",
+    "firebase-logs": "firebase functions:log",
     "start": "yoshi start",
     "precommit": "lint-staged",
     "pretest": "yoshi build",
