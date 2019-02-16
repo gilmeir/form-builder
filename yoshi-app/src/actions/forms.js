@@ -8,9 +8,12 @@ const getFormFields = formId => axios.get(`/api/forms/${formId}`).then(extractDa
 
 const submitForm = (formId, formFields) => axios.post(`/api/submit/${formId}`, formFields).then(extractData);
 
+const getFormSubmissions = formId => axios.get(`/api/submissions?formId=${formId}`).then(extractData);
+
 export {
   saveForm,
   getForms,
   submitForm,
   getFormFields,
+  getFormSubmissions,
 }
