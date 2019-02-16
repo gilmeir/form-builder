@@ -83,7 +83,9 @@ app.get('/submissions', (req, res) => {
 
 
 const getFormSubmissions = formId => {
-  return Object.keys(submissions).filter(submissionId => submissions[submissionId].formId.toString() === formId.toString());
+  return Object.keys(submissions)
+    .map(id => submissions[id])
+    .filter(submission => submission.formId.toString() === formId.toString());
 };
 
 const api = functions.https.onRequest(app);
