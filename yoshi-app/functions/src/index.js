@@ -1,15 +1,12 @@
 const functions = require('firebase-functions');
 const admin = require('firebase-admin');
-//const app = require('./app');
+const cors = require('cors');
 const express = require('express');
 
-const app = express();
-
-const apiRouter = require('express').Router();
-
-// Create and Deploy Your First Cloud Functions
-// https://firebase.google.com/docs/functions/write-firebase-functions
 admin.initializeApp();
+
+const app = express();
+app.use(cors());
 
 const forms = {
   1: {
@@ -42,11 +39,11 @@ const submissions = {
   }
 };
 
-apiRouter.get('/forms', (req, res) => {
+app.get('/forms', (req, res) => {
   setTimeout(() => {
-    const formsSummary = Object.values(forms).reduce(
-      (acc, form) => {
-        console.log({apiForm: form});
+    const formsSummary = Object.keys(forms).reduce(
+      (acc, formId) => {
+        const form = forms[formId];
         return [
           ...acc,
           {
@@ -60,12 +57,36 @@ apiRouter.get('/forms', (req, res) => {
   }, 1000);
 });
 
+app.post('/forms', (req, res) => {
+  forms.push(req.body);
+  res.sendStatus(200);
+});
+
+app.get('/forms/:id', (req, res) => {
+  setTimeout(() => res.json(forms[req.params.id.toString()]), 1000);
+});
+
+app.post('/submit/:id', (req, res) => {
+  const formId = parseInt(req.params.id);
+  const nextId = Math.max(...Object.keys(submissions)) + 1;
+  submissions[nextId] = {
+    formId,
+    values: req.body,
+  };
+  res.sendStatus(200);
+});
+
+app.get('/submissions', (req, res) => {
+  console.log({submissions: req.query});
+  setTimeout(() => res.json(getFormSubmissions(req.query.formId)), 1000);
+});
+
+
 const getFormSubmissions = formId => {
-  return Object.values(submissions).filter(submission => submission.formId.toString() === formId.toString());
+  return Object.keys(submissions).filter(submissionId => submissions[submissionId].formId.toString() === formId.toString());
 };
 
-const api = functions.https.onRequest(apiRouter);
-//const api = functions.https.onRequest(app);
+const api = functions.https.onRequest(app);
 
 module.exports = {
   api,
