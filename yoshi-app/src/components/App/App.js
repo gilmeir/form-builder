@@ -5,6 +5,7 @@ import styles from './App.scss';
 import * as routes from '../../routes/routes';
 import FormsList from '../FormsList/FormsList';
 import FormBuilder from '../FormBuilder/FormBuilder';
+import FormSubmit from '../FormSubmit/FormSubmit';
 import * as formsActions from '../../actions/forms';
 
 const App = () => (
@@ -19,6 +20,17 @@ const App = () => (
         <Route
           path={routes.builder}
           render={() => <FormBuilder saveForm={formsActions.saveForm}/>}
+        />
+
+        <Route
+          path={routes.formSubmitUrl(':id')}
+          render={({match}) =>
+            <FormSubmit
+              formId={match.params.id}
+              onSubmit={formsActions.submitForm}
+              getFormFields={formsActions.getFormFields}
+            />
+          }
         />
 
         <Route

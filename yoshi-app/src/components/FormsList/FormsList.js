@@ -20,7 +20,10 @@ class FormsList extends React.Component {
         forms,
         loading: false,
       }))
-      .catch(() => this.setState({error: 'Failed retrieving your forms'}));
+      .catch(() => this.setState({
+        error: 'Failed retrieving your forms',
+        loading: false,
+      }));
     this.setState({loading: true});
   }
 
@@ -47,8 +50,8 @@ class FormsList extends React.Component {
         </Box>
 
         {
-          loading &&
-          <Box marginTop="15px">
+          (loading || error) &&
+          <Box marginTop="25px">
             <Loader
               status={error ? 'error' : 'loading'}
               text={error ? 'Failed loading your forms' : 'Loading your forms'}
