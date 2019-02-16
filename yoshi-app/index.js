@@ -35,9 +35,21 @@ const submissions = {
   1: {
     formId: 1,
     values: {
-      'first name': 'first value',
+      'first name': 'john',
+      'last name': 'doe',
+    }
+  },
+  2: {
+    formId: 1,
+    values: {
+      'first name': 'gil',
+      'last name': 'meir',
     }
   }
+};
+
+const getFormSubmissions = formId => {
+  return Object.values(submissions).filter(submission => submission.formId.toString() === formId.toString());
 };
 
 // Register an express middleware. Learn more: http://expressjs.com/en/guide/using-middleware.html.
@@ -56,18 +68,19 @@ app.post('/api/forms', (req, res) => {
 
 app.get('/api/forms', (req, res) => {
   setTimeout(() => {
-    const formsList = Object.values(forms).reduce(
+    const formsSummary = Object.values(forms).reduce(
       (acc, form) => {
+        console.log({apiForm: form});
         return [
           ...acc,
           {
             ...form,
-            numSubmissions: Object.values(submissions).filter(submission => submission.formId === form.id).length,
+            numSubmissions: getFormSubmissions(form.id.toString()).length,
           },
         ]
       }, []
     );
-    res.json(formsList);
+    res.json(formsSummary);
   }, 1000);
 });
 
@@ -83,6 +96,11 @@ app.post('/api/submit/:id', (req, res) => {
     values: req.body,
   };
   res.sendStatus(200);
+});
+
+app.get('/api/submissions', (req, res) => {
+  console.log({submissions: req.query});
+  setTimeout(() => res.json(getFormSubmissions(req.query.formId)), 1000);
 });
 
 // Define a route to render our initial HTML.
