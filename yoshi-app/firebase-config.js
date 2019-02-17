@@ -16,4 +16,4 @@ const renderHtml = () =>
     }
   });
 
-export default renderHtml;
+module.exports = renderHtml;
