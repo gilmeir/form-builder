@@ -8,7 +8,7 @@
     "email": "gilme@wix.com"
   },
   "scripts": {
-    "firebase-build": "yoshi build && node ./generate-html.js && pushd . && cd functions && npm run build && popd",
+    "firebase-build": "yoshi build && node ./generate-firebase-html.js && pushd . && cd functions && npm run build && popd",
     "firebase-serve": "firebase serve",
     "firebase-deploy": "NODE_ENV=production npm run firebase-build && firebase deploy",
     "firebase-logs": "firebase functions:log",
