@@ -4,12 +4,12 @@ const renderVm = require('./vm');
 
 const html = renderVm({
   "serverUrl": process.env.NODE_ENV === 'production'
-    ? 'https://us-central1-yoshi-app-8172c.cloudfunctions.net/'
-    : 'http://localhost:5001/yoshi-app-8172c/us-central1/',
+    ? 'https://us-central1-form-builder-gil.cloudfunctions.net/'
+    : 'http://localhost:5001/form-builder-gil/us-central1/',
   "debug": process.env.NODE_ENV !== 'production',
   "clientTopology": {
     "staticsDomain": "static.parastorage.com",
-    "staticsBaseUrl": process.env.NODE_ENV === 'production' ? "//yoshi-app-8172c.firebaseapp.com/": `//localhost:5000/`
+    "staticsBaseUrl": process.env.NODE_ENV === 'production' ? "//form-builder-gil.firebaseapp.com/": `//localhost:5000/`
   }
 });
 
