@@ -91,7 +91,7 @@ class NewFieldSelection extends React.Component {
               <Input
                 type="text"
                 tabIndex={1}
-                onChange={e => this.updateParam('label', e.target.value.trim())}
+                onChange={e => this.updateParam('label', e.target.value)}
                 status={label.error && 'error'}
                 statusMessage={label.error}
                 value={label.value}
@@ -106,7 +106,7 @@ class NewFieldSelection extends React.Component {
               <Input
                 type="text"
                 tabIndex={2}
-                onChange={e => this.updateParam('name', e.target.value.trim())}
+                onChange={e => this.updateParam('name', e.target.value)}
                 status={name.error && 'error'}
                 statusMessage={name.error}
                 value={name.value}

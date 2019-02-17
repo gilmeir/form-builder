@@ -1,7 +1,7 @@
 const validateFieldParam = ({paramName, paramValue, shouldBeUnique, existingFields}) => {
     const errors = [];
 
-    if (!paramValue) {
+    if (!paramValue.trim()) {
       errors.push(`Please provide a ${paramName}`);
     } else if (shouldBeUnique) {
       const existingValues = existingFields.map(field => field[paramName]);
