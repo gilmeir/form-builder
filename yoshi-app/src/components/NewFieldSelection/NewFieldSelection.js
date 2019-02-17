@@ -75,7 +75,6 @@ class NewFieldSelection extends React.Component {
       <Modal
         isOpen={true}
         shouldCloseOnOverlayClick={false}
-        shouldDisplayCloseButton
       >
         <MessageBoxFunctionalLayout
           title="Fill in the field details"
