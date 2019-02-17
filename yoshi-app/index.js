@@ -1,11 +1,12 @@
 const express = require('express');
-const session = require('express-session');
+const bodyParser = require('body-parser');
 const renderVM = require('./vm');
 
 const app = express();
+app.use(bodyParser());
 
 const forms = {
-  1: {
+  "1": {
     name: 'First form',
     fields: [
       {
@@ -18,15 +19,15 @@ const forms = {
 };
 
 const submissions = {
-  1: {
-    formId: 1,
+  "1": {
+    formId: "1",
     values: {
       'first name': 'john',
       'last name': 'doe',
     }
   },
-  2: {
-    formId: 1,
+  "2": {
+    formId: "1",
     values: {
       'first name': 'gil',
       'last name': 'meir',
@@ -35,35 +36,28 @@ const submissions = {
 };
 
 const getFormSubmissions = formId => {
-  return Object.values(submissions).filter(submission => submission.formId.toString() === formId.toString());
+  return Object.values(submissions).filter(submission => submission.formId === formId);
 };
 
-// Register an express middleware. Learn more: http://expressjs.com/en/guide/using-middleware.html.
-app.use(
-  session({
-    secret: 'secret',
-    resave: true,
-    saveUninitialized: true,
-  }),
-);
-
 app.post('/api/forms', (req, res) => {
-  const nextId = Math.max(...Object.keys(forms)) + 1;
-  forms[nextId] = req.body;
+  const nextId = Math.max(...Object.keys(forms).map(parseInt)) + 1;
+  forms[nextId.toString()] = req.body;
   res.sendStatus(200);
 });
 
 app.get('/api/forms', (req, res) => {
   setTimeout(() => {
     const formsSummary = Object.keys(forms).reduce(
-      (acc, formId) => ([
-        ...acc,
-        {
-          ...forms[formId],
-          id: formId,
-          numSubmissions: getFormSubmissions(formId).length,
-        },
-      ]), []
+      (acc, formId) => {
+        return [
+          ...acc,
+          {
+            name: forms[formId].name || 'I',
+            id: formId,
+            numSubmissions: getFormSubmissions(formId).length,
+          },
+        ]
+      }, []
     );
     res.json(formsSummary);
   }, 1000);
@@ -74,9 +68,9 @@ app.get('/api/forms/:id', (req, res) => {
 });
 
 app.post('/api/submit/:id', (req, res) => {
-  const formId = parseInt(req.params.id);
-  const nextId = Math.max(...Object.keys(submissions)) + 1;
-  submissions[nextId] = {
+  const formId = req.params.id;
+  const nextId = Math.max(...Object.keys(submissions).map(parseInt)) + 1;
+  submissions[nextId.toString()] = {
     formId,
     values: req.body,
   };
