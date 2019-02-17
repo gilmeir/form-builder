@@ -51,7 +51,7 @@ app.get('/forms/:id', async (req, res) => {
   const formId = req.params.id;
 
   const formsData = [];
-  const formsSnapshot = await formsCollection.get(formId);
+  const formsSnapshot = await formsCollection.doc(formId).get();
   formsSnapshot.forEach(doc => {
     const docData = doc.data();
     formsData.push(docData);
