@@ -86,6 +86,7 @@ const columns = [
   {
     title: 'Form Id',
     align: 'center',
+    width: '150px',
     render: row => row.id,
   },
   {
