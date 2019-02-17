@@ -10,8 +10,13 @@ const forms = {
     name: 'First form',
     fields: [
       {
-        name: 'first name',
-        label: 'first label',
+        name: 'firstName',
+        label: 'First Name',
+        type: 'text',
+      },
+      {
+        name: 'lastName',
+        label: 'Last Name',
         type: 'text',
       }
     ]
@@ -22,15 +27,15 @@ const submissions = {
   "1": {
     formId: "1",
     values: {
-      'first name': 'john',
-      'last name': 'doe',
+      'firstName': 'john',
+      'lastName': 'doe',
     }
   },
   "2": {
     formId: "1",
     values: {
-      'first name': 'gil',
-      'last name': 'meir',
+      'firstName': 'jim',
+      'lastName': 'smith',
     }
   }
 };
