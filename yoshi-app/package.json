@@ -8,9 +8,9 @@
     "email": "gilme@wix.com"
   },
   "scripts": {
-    "firebase-build": "yoshi build && node ./generateHtml.js",
+    "firebase-build": "yoshi build && node ./generateHtml.js && pushd . && cd functions && npm run build && popd",
     "firebase-serve": "firebase serve",
-    "firebase-deploy": "NODE_ENV=production npm run firebase-build && firebase deploy --only hosting",
+    "firebase-deploy": "NODE_ENV=production npm run firebase-build && firebase deploy",
     "firebase-logs": "firebase functions:log",
     "start": "yoshi start",
     "precommit": "lint-staged",
