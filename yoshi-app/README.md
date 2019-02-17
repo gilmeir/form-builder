@@ -7,33 +7,29 @@ Install dependencies:
 npm i
 ```
 
-
-Run:
+Run frontend with mock server:
 ```bash
 npm start
 ```
-The server mocks the database layer with in-memory objects/arrays.
-\  
+
+
 ### Production
+Hosted on Firebase: https://form-builder-gil.firebaseapp.com
 
+Make sure to [setup a firebase project](https://firebase.google.com/docs/cli/) before deploying.
 
-Hosted on Firebase: https://yoshi-app-8172c.firebaseapp.com
+Edit `firebase-config.js` with your firebase project details.
+```bash
+npm run firebase-deploy
+```
 
+## Project Structure
 Components:
 - Frontend: `src/`
   - Yoshi based project
 - Backend code: `functions/`
   - An express app
-- Storage: Firestore database setup within the project
+- Storage: Firestore database
   - Two collections are used:
     - forms
     - submissions
-
-Deploy:
-
-Make sure to [setup a firebase project](https://firebase.google.com/docs/cli/) before deploying.
-
-Run:
-```bash
-npm run firebase-deploy
-```
