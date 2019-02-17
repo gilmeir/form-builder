@@ -4,22 +4,8 @@ const renderVM = require('./vm');
 
 const app = express();
 
-const formsList = [
-  {
-    id: 1,
-    name: 'Task Feedback',
-    numSubmissions: 0,
-  },
-  {
-    id: 2,
-    name: 'Job Application',
-    numSubmissions: 152,
-  },
-];
-
 const forms = {
   1: {
-    id: 1,
     name: 'First form',
     fields: [
       {
@@ -62,23 +48,22 @@ app.use(
 );
 
 app.post('/api/forms', (req, res) => {
-  forms.push(req.body);
+  const nextId = Math.max(...Object.keys(forms)) + 1;
+  forms[nextId] = req.body;
   res.sendStatus(200);
 });
 
 app.get('/api/forms', (req, res) => {
   setTimeout(() => {
-    const formsSummary = Object.values(forms).reduce(
-      (acc, form) => {
-        console.log({apiForm: form});
-        return [
-          ...acc,
-          {
-            ...form,
-            numSubmissions: getFormSubmissions(form.id.toString()).length,
-          },
-        ]
-      }, []
+    const formsSummary = Object.keys(forms).reduce(
+      (acc, formId) => ([
+        ...acc,
+        {
+          ...forms[formId],
+          id: formId,
+          numSubmissions: getFormSubmissions(formId).length,
+        },
+      ]), []
     );
     res.json(formsSummary);
   }, 1000);
