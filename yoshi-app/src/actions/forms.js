@@ -5,7 +5,7 @@ const backend = axios.create({baseURL});
 
 const extractData = response => response.data;
 
-const saveForm = formFields => backend.post('/api/forms/', formFields).then(extractData);
+const saveForm = formData => backend.post('/api/forms/', formData).then(extractData);
 const getForms = () => backend.get('/api/forms').then(extractData);
 const getFormFields = formId => backend.get(`/api/forms/${formId}`).then(extractData);
 
