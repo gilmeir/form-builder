@@ -3,90 +3,96 @@ const admin = require('firebase-admin');
 const cors = require('cors');
 const express = require('express');
 
-admin.initializeApp();
+//const serviceAccountKey = require("./service-account-key.json");
+
+
+/*admin.initializeApp({
+  credential: admin.credential.cert(serviceAccountKey),
+  databaseURL: "https://yoshi-app-8172c.firebaseio.com"
+})*/
+
+admin.initializeApp(functions.config().firebase);
+const firestore = admin.firestore();
+
+const formsCollection = firestore.collection('forms');
+const submissionsCollection = firestore.collection('submissions');
 
 const app = express();
 app.use(cors());
 
-const forms = {
-  1: {
-    id: 1,
-    name: 'First form',
-    fields: [
-      {
-        name: 'first name',
-        label: 'first label',
-        type: 'text',
-      }
-    ]
-  }
-};
+app.get('/forms', async (req, res) => {
+  let formsData = {};
+  const formsSnapshot = await formsCollection.get();
+  formsSnapshot.forEach(doc => {
+    formsData[doc.id] = {
+      id: doc.id,
+      ...doc.data(),
+      numSubmissions: 0,
+    };
+  });
 
-const submissions = {
-  1: {
-    formId: 1,
-    values: {
-      'first name': 'john',
-      'last name': 'doe',
-    }
-  },
-  2: {
-    formId: 1,
-    values: {
-      'first name': 'gil',
-      'last name': 'meir',
-    }
-  }
-};
+  const submissionsSnapshot = await submissionsCollection.get();
+  submissionsSnapshot.forEach(doc => {
+    const docData = doc.data();
+    formsData[docData.formId].numSubmissions++;
+  });
 
-app.get('/forms', (req, res) => {
-  setTimeout(() => {
-    const formsSummary = Object.keys(forms).reduce(
-      (acc, formId) => {
-        const form = forms[formId];
-        return [
-          ...acc,
-          {
-            ...form,
-            numSubmissions: getFormSubmissions(form.id.toString()).length,
-          },
-        ]
-      }, []
-    );
-    res.json(formsSummary);
-  }, 1000);
+  const response = Object.keys(formsData).map(id => formsData[id]);
+  res.json(response);
 });
 
-app.post('/forms', (req, res) => {
-  forms.push(req.body);
+app.post('/forms', async (req, res) => {
+  const formData = req.body;
+  await formsCollection.add(formData);
   res.sendStatus(200);
 });
 
-app.get('/forms/:id', (req, res) => {
-  setTimeout(() => res.json(forms[req.params.id.toString()]), 1000);
+app.get('/forms/:id', async (req, res) => {
+  const formId = req.params.id;
+
+  const formsData = [];
+  const formsSnapshot = await formsCollection.get(formId);
+  formsSnapshot.forEach(doc => {
+    const docData = doc.data();
+    formsData.push(docData);
+  });
+
+  if (formsData.length === 1) {
+    res.json(formsData[0])
+  } else {
+    res.sendStatus(404);
+  }
 });
 
-app.post('/submit/:id', (req, res) => {
-  const formId = parseInt(req.params.id);
-  const nextId = Math.max(...Object.keys(submissions)) + 1;
-  submissions[nextId] = {
+app.post('/submit/:id', async (req, res) => {
+  const formId = req.params.id;
+  const values = req.body;
+
+  await submissionsCollection.add({
     formId,
-    values: req.body,
-  };
+    values,
+  });
+
   res.sendStatus(200);
 });
 
-app.get('/submissions', (req, res) => {
-  console.log({submissions: req.query});
-  setTimeout(() => res.json(getFormSubmissions(req.query.formId)), 1000);
+app.get('/submissions', async (req, res) => {
+  const formId = req.query.formId;
+
+  const submissions = [];
+  const submissionsSnapshot = await submissionsCollection.where('formId', '==', formId).get();
+  submissionsSnapshot.forEach(doc => {
+    const docData = doc.data();
+    const docId = doc.id;
+
+    submissions.push({
+      id: docId,
+      values: docData.values,
+    });
+  });
+
+  res.json(submissions);
 });
-
-
-const getFormSubmissions = formId => {
-  return Object.keys(submissions)
-    .map(id => submissions[id])
-    .filter(submission => submission.formId.toString() === formId.toString());
-};
 
 const api = functions.https.onRequest(app);
 
