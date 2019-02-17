@@ -22,8 +22,9 @@ app.use(cors());
 
 app.get('/forms', async (req, res) => {
   let formsData = {};
+
   const formsSnapshot = await formsCollection.get();
-  formsSnapshot.forEach(doc => {
+  !formsSnapshot.empty && formsSnapshot.forEach(doc => {
     formsData[doc.id] = {
       id: doc.id,
       ...doc.data(),
@@ -31,10 +32,11 @@ app.get('/forms', async (req, res) => {
     };
   });
 
-  const submissionsSnapshot = await submissionsCollection.get();
-  submissionsSnapshot.forEach(doc => {
+  const submissionsSnapshot = await submissionsCollection.select('formId').get();
+  !submissionsSnapshot.empty && submissionsSnapshot.forEach(doc => {
     const docData = doc.data();
-    formsData[docData.formId].numSubmissions++;
+    const form = formsData[docData.formId];
+    form && form.numSubmissions++;
   });
 
   const response = Object.keys(formsData).map(id => formsData[id]);
@@ -49,13 +51,13 @@ app.post('/forms', async (req, res) => {
 
 app.get('/forms/:id', async (req, res) => {
   const formId = req.params.id;
-
   const formsData = [];
-  const formsSnapshot = await formsCollection.doc(formId).get();
-  formsSnapshot.forEach(doc => {
-    const docData = doc.data();
+
+  const formDoc = await formsCollection.doc(formId).get();
+  if(formDoc.exists) {
+    const docData = formDoc.data();
     formsData.push(docData);
-  });
+  }
 
   if (formsData.length === 1) {
     res.json(formsData[0])
@@ -81,7 +83,7 @@ app.get('/submissions', async (req, res) => {
 
   const submissions = [];
   const submissionsSnapshot = await submissionsCollection.where('formId', '==', formId).get();
-  submissionsSnapshot.forEach(doc => {
+  !submissionsSnapshot.empty && submissionsSnapshot.forEach(doc => {
     const docData = doc.data();
     const docId = doc.id;
 
