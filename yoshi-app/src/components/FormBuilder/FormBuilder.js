@@ -28,11 +28,9 @@ class FormBuilder extends React.Component {
     });
   }
 
-  toggleNameSelectionModal() {
-    const { showNameSelectionModal } = this.state;
-
+  hideNameSelectionModal() {
     this.setState({
-      showNameSelectionModal: !showNameSelectionModal,
+      showNameSelectionModal: false,
     })
   }
 
@@ -187,6 +185,7 @@ class FormBuilder extends React.Component {
         <FormNameSelection
           show={showNameSelectionModal}
           onSave={name => this.onSave(name)}
+          onCancel={() => this.hideNameSelectionModal()}
         />
       </div>
     );

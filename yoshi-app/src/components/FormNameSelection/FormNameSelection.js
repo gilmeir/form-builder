@@ -11,6 +11,7 @@ class FormNameSelection extends React.Component {
   render() {
     const {
       onSave,
+      onCancel,
       show,
     } = this.props;
     const { name } = this.state;
@@ -19,13 +20,13 @@ class FormNameSelection extends React.Component {
       <Modal
         isOpen={show}
         shouldCloseOnOverlayClick={false}
-        shouldDisplayCloseButton
       >
         <MessageBoxFunctionalLayout
           title="Give This Form a Name"
           confirmText="Save"
           cancelText="Cancel"
           onOk={() => onSave(name)}
+          onCancel={onCancel}
           onRequestClose={() => this.toggleNameSelectionModal()}
         >
           <Input
