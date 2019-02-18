@@ -70,13 +70,13 @@ class Form extends React.Component {
               <div className={styles.formField} key={generateFieldKey({type, name, label})}>
                 <Label>
                   {label}
-                </Label>
 
-                <Input
-                  type={type}
-                  name={name}
-                  onChange={e => this.updateValue(name, e.target.value)}
-                />
+                  <Input
+                    type={type}
+                    name={name}
+                    onChange={e => this.updateValue(name, e.target.value)}
+                  />
+                </Label>
               </div>
             ))
           }

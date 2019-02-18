@@ -1,7 +1,7 @@
 import React from 'react';
 import Input from 'wix-style-react/Input';
 import Dropdown from 'wix-style-react/Dropdown';
-import FormField from 'wix-style-react/FormField';
+import Label from 'wix-style-react/Label';
 import styles from './NewFieldSelection.scss';
 import Modal from 'wix-style-react/Modal';
 import { MessageBoxFunctionalLayout } from 'wix-style-react/MessageBox';
@@ -84,9 +84,8 @@ class NewFieldSelection extends React.Component {
           onOk={(e) => this.handleSubmit(e)}
         >
           <form onSubmit={e => this.handleSubmit(e)}>
-            <FormField
-              label="Label"
-            >
+            <Label>
+              Label
               <Input
                 type="text"
                 tabIndex={1}
@@ -97,11 +96,10 @@ class NewFieldSelection extends React.Component {
                 autoFocus
                 className={styles.input}
               />
-            </FormField>
+            </Label>
 
-            <FormField
-              label="Name"
-            >
+            <Label>
+              Name
               <Input
                 type="text"
                 tabIndex={2}
@@ -111,16 +109,17 @@ class NewFieldSelection extends React.Component {
                 value={name.value}
                 className={styles.input}
               />
-            </FormField>
+            </Label>
 
-            <FormField label="Type">
+            <Label>
+              Type
               <Dropdown
                 tabIndex={3}
                 options={fieldTypesOptions}
                 onSelect={option => this.updateParam('type', option.id)}
                 selectedId={(fieldTypesOptions.filter(fieldType => fieldType.id === type.value).pop() || {}).id}
               />
-            </FormField>
+            </Label>
           </form>
         </MessageBoxFunctionalLayout>
       </Modal>
