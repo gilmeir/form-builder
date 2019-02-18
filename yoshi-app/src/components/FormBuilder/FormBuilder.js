@@ -6,7 +6,7 @@ import Add from 'wix-style-react/new-icons/Add';
 import EmptyState from 'wix-style-react/EmptyState';
 import NewFieldSelection from '../NewFieldSelection/NewFieldSelection';
 import Text from 'wix-style-react/Text';
-import { isValidFieldParam } from './helpers';
+import { isValidFieldParam } from './validations';
 import Form from '../Form/Form';
 import * as routes from '../../routes/routes';
 import styles from './FormBuilder.scss';
