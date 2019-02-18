@@ -1,4 +1,5 @@
 import React from 'react';
+import propTypes from 'prop-types';
 import Input from 'wix-style-react/Input';
 import Dropdown from 'wix-style-react/Dropdown';
 import Modal from 'wix-style-react/Modal';
@@ -133,5 +134,11 @@ const updateErrorsInParams = (params, paramsErrors) =>
         error: paramsErrors[paramName],
       }
     }), {});
+
+NewFieldSelection.propTypes = {
+  isValidFieldParam: propTypes.func,
+  onAdd: propTypes.func,
+  onCancel: propTypes.func,
+};
 
 export default NewFieldSelection;

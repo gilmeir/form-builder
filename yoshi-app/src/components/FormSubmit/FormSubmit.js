@@ -1,4 +1,5 @@
 import React from 'react';
+import propTypes from 'prop-types';
 import Loader from 'wix-style-react/Loader';
 import Box from 'wix-style-react/Box';
 import Card from 'wix-style-react/Card';
@@ -88,5 +89,12 @@ class FormSubmit extends React.Component {
     );
   }
 }
+
+FormSubmit.propTypes = {
+  formId: propTypes.string,
+  getFormFields: propTypes.func,
+  onSubmit: propTypes.func,
+  redirectTo: propTypes.func,
+};
 
 export default FormSubmit;

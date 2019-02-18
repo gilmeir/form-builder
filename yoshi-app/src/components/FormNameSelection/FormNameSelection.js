@@ -1,4 +1,5 @@
 import React from 'react';
+import propTypes from 'prop-types';
 import Modal from 'wix-style-react/Modal';
 import { MessageBoxFunctionalLayout } from 'wix-style-react/MessageBox';
 import Input from 'wix-style-react/Input';
@@ -40,5 +41,11 @@ class FormNameSelection extends React.Component {
     );
   }
 }
+
+FormNameSelection.propTypes = {
+  show: propTypes.bool,
+  onSave: propTypes.func,
+  onCancel: propTypes.func,
+};
 
 export default FormNameSelection;

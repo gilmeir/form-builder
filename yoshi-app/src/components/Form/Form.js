@@ -1,4 +1,5 @@
 import React from 'react';
+import propTypes from 'prop-types';
 import Input from 'wix-style-react/Input';
 import FormField from '../FormField/FormField';
 import Box from 'wix-style-react/Box';
@@ -79,6 +80,18 @@ class Form extends React.Component {
 
 Form.defaultProps = {
   fields: [],
+};
+
+Form.propTypes = {
+  onSubmit: propTypes.func,
+  formId: propTypes.string,
+  fields: propTypes.arrayOf(
+    propTypes.shape({
+      type: propTypes.string.required,
+      name: propTypes.string.required,
+      label: propTypes.string.required,
+    })
+  ),
 };
 
 export default Form;

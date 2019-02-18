@@ -1,4 +1,5 @@
 import React from 'react';
+import propTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import Table from 'wix-style-react/Table';
 import Loader from 'wix-style-react/Loader';
@@ -110,5 +111,9 @@ const columns = [
     render: row => <Link to={formSubmissionsUrl(row.id)}>View</Link>,
   },
 ];
+
+FormsList.propTypes = {
+  getForms: propTypes.func,
+};
 
 export default FormsList;

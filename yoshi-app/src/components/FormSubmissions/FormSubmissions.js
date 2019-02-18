@@ -1,4 +1,5 @@
 import React from 'react';
+import propTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import Table from 'wix-style-react/Table';
 import Box from 'wix-style-react/Box';
@@ -34,7 +35,6 @@ class FormSubmissions extends React.Component {
   }
 
   render() {
-    const { formId } = this.props;
     const {
       submissions,
       loading,
@@ -83,5 +83,10 @@ const generateColumns = submission => Object.keys(submission).map(fieldName => (
   align: 'center',
   render: row => row.values[fieldName],
 }));
+
+FormSubmissions.propTypes = {
+  formId: propTypes.string,
+  getSubmissions: propTypes.func,
+};
 
 export default FormSubmissions;

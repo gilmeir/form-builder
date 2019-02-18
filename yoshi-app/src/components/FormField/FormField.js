@@ -1,4 +1,5 @@
 import React from 'react';
+import propTypes from 'prop-types';
 import Label from 'wix-style-react/Label';
 
 class FormField extends React.Component {
@@ -19,7 +20,7 @@ class FormField extends React.Component {
     const {
       label,
       children,
-      changeCallback = 'onChange',
+      changeCallback,
       } = this.props;
     const { error } = this.state;
 
@@ -43,6 +44,17 @@ class FormField extends React.Component {
       </Label>
     );
   }
+}
+
+FormField.propTypes = {
+  validator: propTypes.func,
+  label: propTypes.string,
+  children: propTypes.node,
+  changeCallback: propTypes.string,
+};
+
+FormField.defaultProps = {
+  changeCallback: 'onChange',
 };
 
 export default FormField;

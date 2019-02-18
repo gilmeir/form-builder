@@ -1,4 +1,5 @@
 import React from 'react';
+import propTypes from 'prop-types';
 import { Redirect } from 'react-router';
 import Card from 'wix-style-react/Card';
 import Button from 'wix-style-react/Button';
@@ -192,5 +193,9 @@ class FormBuilder extends React.Component {
     );
   }
 }
+
+FormBuilder.propTypes = {
+  saveForm: propTypes.func,
+};
 
 export default FormBuilder;
