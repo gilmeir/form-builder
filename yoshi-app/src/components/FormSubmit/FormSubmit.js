@@ -39,11 +39,18 @@ class FormSubmit extends React.Component {
     this.setState({loading: true});
   }
 
-  render() {
+  handleSubmit(formId, values) {
     const {
-      formId,
       onSubmit,
+      redirectTo,
     } = this.props;
+
+    onSubmit(formId, values)
+      .then(() => redirectTo(routes.list));
+  }
+
+  render() {
+    const { formId } = this.props;
 
     const {
       name,
@@ -72,8 +79,7 @@ class FormSubmit extends React.Component {
                   <Form
                     formId={formId}
                     fields={fields}
-                    onSubmit={onSubmit}
-                    onSubmitSuccessRedirectTo={routes.list}
+                    onSubmit={(...args) => this.handleSubmit(...args)}
                   />
                 </Card.Content>
               </Card>

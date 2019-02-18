@@ -26,10 +26,11 @@ const App = () => (
 
         <Route
           path={routes.formSubmitUrl(':id')}
-          render={({match}) =>
+          render={({match, history}) =>
             <FormSubmit
               formId={match.params.id}
               onSubmit={formsActions.submitForm}
+              redirectTo={history.push}
               getFormFields={formsActions.getFormFields}
             />
           }
