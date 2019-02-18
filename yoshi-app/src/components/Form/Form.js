@@ -103,7 +103,7 @@ const generateFieldKey = ({name, label, type}) => `${name}-${label}-${type}`;
 const getFieldsValues = params =>
   Object.keys(params).reduce((acc, paramName) => ({
     ...acc,
-    [paramName]: params[paramName].value,
+    [paramName]: params[paramName].value || '',
   }), {});
 
 export default Form;
