@@ -1,14 +1,13 @@
 import React from 'react';
 import Input from 'wix-style-react/Input';
-import Label from 'wix-style-react/Label';
+import FormField from '../FormField/FormField';
 import Box from 'wix-style-react/Box';
 import Button from 'wix-style-react/Button';
 import styles from './Form.scss';
-import { Redirect } from 'react-router';
 
 class Form extends React.Component {
   state = {
-    submitted: false,
+    values: {},
   };
 
   handleSubmit(e) {
@@ -18,14 +17,9 @@ class Form extends React.Component {
       onSubmit,
       formId,
     } = this.props;
-    const fields = this.state;
+    const { values } = this.state;
 
-    const fieldsValues = getFieldsValues(fields);
-
-    onSubmit && onSubmit(formId, fieldsValues)
-      .then(() => this.setState({
-        submitted: true,
-      }));
+    return onSubmit(formId, values);
   }
 
   shouldShowSubmitButton() {
@@ -38,55 +32,40 @@ class Form extends React.Component {
   }
 
   updateValue(paramName, paramValue) {
-    //const { isValidFieldParam } = this.props;
-
-    //const error = isValidFieldParam(paramName, paramValue);
+    const { values } = this.state;
 
     this.setState({
-      [paramName]: {
-        value: paramValue,
-        //error,
+      values: {
+        ...values,
+        [paramName]: paramValue,
       }
-    })
+    });
   }
 
   render() {
-    const {
-      fields,
-      onSubmitSuccessRedirectTo,
-    } = this.props;
-
-    const { submitted } = this.state;
-
-    if (onSubmitSuccessRedirectTo && submitted) {
-      return <Redirect to={onSubmitSuccessRedirectTo}/>
-    }
+    const { fields } = this.props;
 
     return (
       <Box width="100%">
-        <form style={{width: '100%'}}>
+        <form onSubmit={e => this.handleSubmit(e)} style={{width: '100%'}}>
           {
-            fields.map(({type, name, label}) => (
-              <div className={styles.formField} key={generateFieldKey({type, name, label})}>
-                <Label>
-                  {label}
-
+            fields.map(({type, name, label}, i) => (
+              <div className={styles.formField} key={i}>
+                <FormField label={label}>
                   <Input
+                    tabIndex={i}
                     type={type}
                     name={name}
                     onChange={e => this.updateValue(name, e.target.value)}
                   />
-                </Label>
+                </FormField>
               </div>
             ))
           }
           {
             this.shouldShowSubmitButton() && (
               <Box align="center" marginTop="15px">
-                <Button
-                  type="submit"
-                  onClick={e => this.handleSubmit(e)}
-                >
+                <Button type="submit">
                   Submit
                 </Button>
               </Box>
@@ -98,12 +77,8 @@ class Form extends React.Component {
   }
 }
 
-const generateFieldKey = ({name, label, type}) => `${name}-${label}-${type}`;
-
-const getFieldsValues = params =>
-  Object.keys(params).reduce((acc, paramName) => ({
-    ...acc,
-    [paramName]: params[paramName].value || '',
-  }), {});
+Form.defaultProps = {
+  fields: [],
+};
 
 export default Form;

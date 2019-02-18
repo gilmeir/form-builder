@@ -1,4 +1,4 @@
-const validateFieldParam = ({paramName, paramValue, shouldBeUnique, existingFields}) => {
+const isValidFieldParam = ({paramName, paramValue, shouldBeUnique, existingFields}) => {
     const errors = [];
 
     if (!paramValue.trim()) {
@@ -6,7 +6,7 @@ const validateFieldParam = ({paramName, paramValue, shouldBeUnique, existingFiel
     } else if (shouldBeUnique) {
       const existingValues = existingFields.map(field => field[paramName]);
       if (existingValues.includes(paramValue)) {
-        errors.push(`${paramName} is already used in another field, please choose a different value`);
+        errors.push(`This ${paramName} is already used in another field, please choose a different value`);
       }
     }
 
@@ -14,5 +14,5 @@ const validateFieldParam = ({paramName, paramValue, shouldBeUnique, existingFiel
 };
 
 export {
-  validateFieldParam,
+  isValidFieldParam,
 }

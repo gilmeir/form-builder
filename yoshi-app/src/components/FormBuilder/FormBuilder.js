@@ -6,7 +6,7 @@ import Add from 'wix-style-react/new-icons/Add';
 import EmptyState from 'wix-style-react/EmptyState';
 import NewFieldSelection from '../NewFieldSelection/NewFieldSelection';
 import Text from 'wix-style-react/Text';
-import { validateFieldParam } from './helpers';
+import { isValidFieldParam } from './helpers';
 import Form from '../Form/Form';
 import * as routes from '../../routes/routes';
 import styles from './FormBuilder.scss';
@@ -15,7 +15,6 @@ import FormNameSelection from '../FormNameSelection/FormNameSelection';
 class FormBuilder extends React.Component {
   state = {
     formFields: [],
-    formName: 'default name',
     showNewFieldSelection: false,
     saved: false,
     saveError: undefined,
@@ -51,21 +50,21 @@ class FormBuilder extends React.Component {
 
     switch(paramName) {
       case 'name':
-        return validateFieldParam({
+        return isValidFieldParam({
           paramName,
           paramValue,
           shouldBeUnique: true,
           existingFields: formFields,
         });
       case 'label':
-        return validateFieldParam({
+        return isValidFieldParam({
           paramName,
           paramValue,
           shouldBeUnique: true,
           existingFields: formFields,
         });
       case 'type':
-        return validateFieldParam({
+        return isValidFieldParam({
           paramName,
           paramValue,
           shouldBeUnique: false,
@@ -131,7 +130,7 @@ class FormBuilder extends React.Component {
             title='Add Fields To Your Form'
             suffix={
               <Button
-                tabIndex={0}
+                disabled={showNewFieldSelection}
                 size="medium"
                 prefixIcon={<Add />}
                 onClick={() => this.showNewFieldSelection()}
@@ -163,7 +162,9 @@ class FormBuilder extends React.Component {
                   />
                 )
                 : <div style={{marginBottom: 15}}>
-                    <Form fields={formFields}/>
+                    <Form
+                      fields={formFields}
+                    />
                     <div className={styles.formFooter}>
                       <Button onClick={() => this.onDone()}>
                         Done

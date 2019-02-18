@@ -1,38 +1,22 @@
 import React from 'react';
 import Input from 'wix-style-react/Input';
 import Dropdown from 'wix-style-react/Dropdown';
-import Label from 'wix-style-react/Label';
-import styles from './NewFieldSelection.scss';
 import Modal from 'wix-style-react/Modal';
 import { MessageBoxFunctionalLayout } from 'wix-style-react/MessageBox';
+import styles from './NewFieldSelection.scss';
+import FormField from '../FormField/FormField';
 
 class NewFieldSelection extends React.Component {
   state = {
-    label: {
-      value: '',
-      error: undefined,
-    },
-    name: {
-      value: '',
-      error: undefined,
-    },
-    type: {
-      value: fieldTypes[0],
-      error: undefined,
-    },
+    label: '',
+    name: '',
+    type: fieldTypes[0],
   };
 
   updateParam(paramName, paramValue) {
-    const { isValidFieldParam } = this.props;
-
-    const error = isValidFieldParam(paramName, paramValue);
-
     this.setState({
-      [paramName]: {
-        value: paramValue,
-        error,
-      }
-    })
+      [paramName]: paramValue,
+    });
   }
 
   getParamsErrors() {
@@ -42,7 +26,7 @@ class NewFieldSelection extends React.Component {
     return Object.keys(params).reduce(
       (paramsErrors, fieldName) => ({
         ...paramsErrors,
-        [fieldName]: isValidFieldParam(fieldName, params[fieldName].value)
+        [fieldName]: isValidFieldParam(fieldName, params[fieldName])
       }),
       {},
     );
@@ -53,14 +37,14 @@ class NewFieldSelection extends React.Component {
 
     const params = this.state;
     const paramsErrors = this.getParamsErrors();
-    const hasErrors = Object.keys(paramsErrors).some(e => paramsErrors[e]);
+    const hasErrors = Object.values(paramsErrors).some(e => e);
 
     if (hasErrors) {
       const stateWithNewErrors = updateErrorsInParams(params, paramsErrors);
       this.setState(stateWithNewErrors);
     } else {
-      const paramsValues = getParamsValues(params);
-      this.props.onAdd(paramsValues);
+      const fieldsParams = this.state;
+      this.props.onAdd(fieldsParams);
     }
   }
 
@@ -69,6 +53,7 @@ class NewFieldSelection extends React.Component {
   }
 
   render() {
+    const { isValidFieldParam } = this.props;
     const { label, name, type } = this.state;
 
     return (
@@ -84,42 +69,40 @@ class NewFieldSelection extends React.Component {
           onOk={(e) => this.handleSubmit(e)}
         >
           <form onSubmit={e => this.handleSubmit(e)}>
-            <Label>
-              Label
+            <FormField
+              label="Label"
+              validator={e => isValidFieldParam('label', e.target.value)}
+            >
               <Input
                 type="text"
-                tabIndex={1}
                 onChange={e => this.updateParam('label', e.target.value)}
-                status={label.error && 'error'}
-                statusMessage={label.error}
-                value={label.value}
+                value={label}
                 autoFocus
                 className={styles.input}
               />
-            </Label>
+            </FormField>
 
-            <Label>
-              Name
+            <FormField
+              label="Name"
+              validator={e => isValidFieldParam('name', e.target.value)}
+            >
               <Input
                 type="text"
-                tabIndex={2}
                 onChange={e => this.updateParam('name', e.target.value)}
-                status={name.error && 'error'}
-                statusMessage={name.error}
-                value={name.value}
+                value={name}
                 className={styles.input}
               />
-            </Label>
+            </FormField>
 
-            <Label>
-              Type
+            <FormField
+              label="Type"
+            >
               <Dropdown
-                tabIndex={3}
                 options={fieldTypesOptions}
                 onSelect={option => this.updateParam('type', option.id)}
-                selectedId={(fieldTypesOptions.filter(fieldType => fieldType.id === type.value).pop() || {}).id}
+                selectedId={(fieldTypesOptions.filter(fieldType => fieldType.id === type).pop() || {}).id}
               />
-            </Label>
+            </FormField>
           </form>
         </MessageBoxFunctionalLayout>
       </Modal>
@@ -150,11 +133,5 @@ const updateErrorsInParams = (params, paramsErrors) =>
         error: paramsErrors[paramName],
       }
     }), {});
-
-const getParamsValues = params =>
-  Object.keys(params).reduce((acc, paramName) => ({
-    ...acc,
-    [paramName]: params[paramName].value,
-  }), {});
 
 export default NewFieldSelection;
