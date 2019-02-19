@@ -5,13 +5,13 @@ const isProduction = process.env.NODE_ENV === 'production';
 const renderHtml = () =>
   renderVm({
     serverBaseUrl: isProduction
-      ? 'https://us-central1-form-builder-gil.cloudfunctions.net/'
-      : 'http://localhost:5001/form-builder-gil/us-central1/',
+      ? 'https://us-central1-simple-form-builder.cloudfunctions.net/'
+      : 'http://localhost:5001/simple-form-builder/us-central1/',
     debug: !isProduction,
     clientTopology: {
       staticsDomain: 'static.parastorage.com',
       staticsBaseUrl: isProduction
-        ? '//form-builder-gil.firebaseapp.com/'
+        ? '//simple-form-builder.firebaseapp.com/'
         : '//localhost:5000/',
     }
   });
