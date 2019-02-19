@@ -7,6 +7,7 @@ import Loader from 'wix-style-react/Loader';
 import EmptyState from 'wix-style-react/EmptyState';
 import Button from 'wix-style-react/Button';
 import Card from 'wix-style-react/Card';
+import * as routes from '../../routes/routes';
 
 class FormSubmissions extends React.Component {
   state = {
@@ -92,7 +93,7 @@ class FormSubmissions extends React.Component {
         {
           !loading && (
             <span style={{marginTop: 25}}>
-              <Link to="/list" style={{textDecoration: 'none'}}>
+              <Link to={routes.list} style={{textDecoration: 'none'}}>
                 <Button>
                   Back
                 </Button>

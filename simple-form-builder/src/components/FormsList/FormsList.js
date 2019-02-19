@@ -7,7 +7,7 @@ import Box from 'wix-style-react/Box';
 import Button from 'wix-style-react/Button';
 import Card from 'wix-style-react/Card';
 import Add from 'wix-style-react/new-icons/Add';
-import { formSubmitUrl, formSubmissionsUrl } from '../../routes/routes';
+import * as routes from '../../routes/routes';
 
 class FormsList extends React.Component {
   state = {
@@ -43,7 +43,7 @@ class FormsList extends React.Component {
         <Card.Header
           title="My Forms"
           suffix={
-            <Link to="/builder" style={{textDecoration: 'none'}}>
+            <Link to={routes.builder} style={{textDecoration: 'none'}}>
               <Button
                 size="medium"
                 prefixIcon={<Add />}
@@ -103,12 +103,12 @@ const columns = [
   {
     title: 'Submit Page',
     align: 'center',
-    render: row => <Link to={formSubmitUrl(row.id)}>View</Link>,
+    render: row => <Link to={routes.formSubmitUrl(row.id)}>View</Link>,
   },
   {
     title: 'Submissions Page',
     align: 'center',
-    render: row => <Link to={formSubmissionsUrl(row.id)}>View</Link>,
+    render: row => <Link to={routes.formSubmissionsUrl(row.id)}>View</Link>,
   },
 ];
 
