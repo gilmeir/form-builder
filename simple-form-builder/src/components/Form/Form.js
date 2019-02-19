@@ -50,18 +50,19 @@ class Form extends React.Component {
       <Box width="100%">
         <form onSubmit={e => this.handleSubmit(e)} style={{width: '100%'}}>
           {
-            fields.map(({type, name, label}, i) => (
-              <div className={styles.formField} key={i}>
+            fields.map(({type, name, label}, i) => {
+              return <div className={styles.formField} key={i}>
                 <FormField label={label}>
                   <Input
-                    tabIndex={i}
+                    autoFocus={i === 0}
+                    tabIndex={i + 1}
                     type={type}
                     name={name}
                     onChange={e => this.updateValue(name, e.target.value)}
                   />
                 </FormField>
               </div>
-            ))
+            })
           }
           {
             this.shouldShowSubmitButton() && (
