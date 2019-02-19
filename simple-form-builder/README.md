@@ -3,15 +3,22 @@
 ### Development
 
 Install dependencies:
+- once for `simple-form-builder` (frontend)
+- and again in `simple-form-builder/functions` within it (backend)
 ```bash
 npm i
 ```
 
-Run frontend with mock server:
+Run the frontend app only (with mock server):
 ```bash
 npm start
 ```
 
+Run locally on firebase context - both frontend & backend:
+```bash
+npm run firebase-serve
+```
+* it builds both projects before serving
 
 ### Production
 Hosted on Firebase: https://form-builder-gil.firebaseapp.com
@@ -22,6 +29,7 @@ Edit `firebase-config.js` with your firebase project details.
 ```bash
 npm run firebase-deploy
 ```
+* it builds both projects before serving
 
 ## Project Structure
 Components:
