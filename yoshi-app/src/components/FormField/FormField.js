@@ -20,16 +20,16 @@ class FormField extends React.Component {
     const {
       label,
       children,
-      changeCallback,
+      onChangeCallbackName,
       } = this.props;
     const { error } = this.state;
 
-    const inputElement = React.Children.only(children);
-    const inputChangeCallback = inputElement.props[changeCallback];
+    const inputNode = React.Children.only(children);
+    const inputNodeOnChangeCallback = inputNode.props[onChangeCallbackName];
 
     const props = {
-      ...inputElement.props,
-      [changeCallback]: inputChangeCallback ? (...args) => this.changeCallbackWithValidation(args, inputChangeCallback) : inputChangeCallback,
+      ...inputNode.props,
+      [onChangeCallbackName]: inputNodeOnChangeCallback ? (...args) => this.changeCallbackWithValidation(args, inputNodeOnChangeCallback) : inputNodeOnChangeCallback,
     };
 
     if (error) {
@@ -40,21 +40,21 @@ class FormField extends React.Component {
     return (
       <Label>
         {label}
-        {inputChangeCallback ? React.cloneElement(inputElement, props) : inputElement}
+        {inputNodeOnChangeCallback ? React.cloneElement(inputNode, props) : inputNode}
       </Label>
     );
   }
 }
 
+FormField.defaultProps = {
+  onChangeCallbackName: 'onChange',
+};
+
 FormField.propTypes = {
   validator: propTypes.func,
   label: propTypes.string,
   children: propTypes.node,
-  changeCallback: propTypes.string,
-};
-
-FormField.defaultProps = {
-  changeCallback: 'onChange',
+  onChangeCallbackName: propTypes.string,
 };
 
 export default FormField;
