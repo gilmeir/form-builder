@@ -7,7 +7,7 @@ const extractData = response => response.data;
 
 const saveForm = formData => backend.post('/api/forms/', formData).then(extractData);
 const getForms = () => backend.get('/api/forms').then(extractData);
-const getFormFields = formId => backend.get(`/api/forms/${formId}`).then(extractData);
+const getForm = formId => backend.get(`/api/forms/${formId}`).then(extractData);
 
 const submitForm = (formId, formFields) => backend.post(`/api/submit/${formId}`, formFields).then(extractData);
 
@@ -17,6 +17,6 @@ export {
   saveForm,
   getForms,
   submitForm,
-  getFormFields,
+  getForm,
   getFormSubmissions,
 }

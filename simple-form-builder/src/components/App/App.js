@@ -31,7 +31,7 @@ const App = () => (
               formId={match.params.id}
               onSubmit={formsActions.submitForm}
               redirectTo={history.push}
-              getFormFields={formsActions.getFormFields}
+              getFormFields={formsActions.getForm}
             />
           }
         />
@@ -41,6 +41,7 @@ const App = () => (
           render={({match, location}) =>
             <FormSubmissions
               formId={getQueryParams(location).formId}
+              getForm={formsActions.getForm}
               getSubmissions={formsActions.getFormSubmissions}
             />
           }
