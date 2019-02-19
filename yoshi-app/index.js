@@ -52,24 +52,25 @@ app.post('/api/forms', (req, res) => {
 
 app.get('/api/forms', (req, res) => {
   setTimeout(() => {
-    const formsSummary = Object.keys(forms).reduce(
-      (acc, formId) => {
+    const formsSummary = Object.entries(forms).reduce(
+      (totalForms, [formId, form]) => {
+        const newForm = {
+          name: form.name,
+          id: formId,
+          numSubmissions: getFormSubmissions(formId).length,
+        };
         return [
-          ...acc,
-          {
-            name: forms[formId].name || 'I',
-            id: formId,
-            numSubmissions: getFormSubmissions(formId).length,
-          },
+          ...totalForms,
+          newForm,
         ]
       }, []
     );
     res.json(formsSummary);
-  }, 1000);
+  }, 500);
 });
 
 app.get('/api/forms/:id', (req, res) => {
-  setTimeout(() => res.json(forms[req.params.id.toString()]), 1000);
+  setTimeout(() => res.json(forms[req.params.id.toString()]), 500);
 });
 
 app.post('/api/submit/:id', (req, res) => {
@@ -84,7 +85,7 @@ app.post('/api/submit/:id', (req, res) => {
 
 app.get('/api/submissions', (req, res) => {
   console.log({submissions: req.query});
-  setTimeout(() => res.json(getFormSubmissions(req.query.formId)), 1000);
+  setTimeout(() => res.json(getFormSubmissions(req.query.formId)), 500);
 });
 
 // Define a route to render our initial HTML.
