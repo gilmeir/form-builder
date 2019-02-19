@@ -9,7 +9,7 @@
   },
   "scripts": {
     "firebase-build": "yoshi build && node ./generate-firebase-html.js && pushd . && cd functions && npm run build && popd",
-    "firebase-serve": " NODE_ENV=development npm run firebase-buildfirebase serve",
+    "firebase-serve": " NODE_ENV=development npm run firebase-build && firebase serve",
     "firebase-deploy": "NODE_ENV=production npm run firebase-build && firebase deploy",
     "firebase-logs": "firebase functions:log",
     "start": "yoshi start",
