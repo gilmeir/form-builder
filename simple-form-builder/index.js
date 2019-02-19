@@ -3,7 +3,7 @@ const bodyParser = require('body-parser');
 const renderVM = require('./vm');
 
 const app = express();
-app.use(bodyParser());
+app.use(bodyParser.json());
 
 const forms = {
   "1": {
