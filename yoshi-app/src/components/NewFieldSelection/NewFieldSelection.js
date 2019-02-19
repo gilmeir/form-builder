@@ -24,11 +24,15 @@ class NewFieldSelection extends React.Component {
     const { isValidFieldParam } = this.props;
     const params = this.state;
 
-    return Object.keys(params).reduce(
-      (paramsErrors, fieldName) => ({
-        ...paramsErrors,
-        [fieldName]: isValidFieldParam(fieldName, params[fieldName])
-      }),
+    return Object.entries(params).reduce(
+      (totalErrors, [fieldName, fieldValue]) => {
+        const error = isValidFieldParam(fieldName, fieldValue);
+
+        return {
+          ...totalErrors,
+          [fieldName]: error,
+        };
+      },
       {},
     );
   }
@@ -36,14 +40,10 @@ class NewFieldSelection extends React.Component {
   handleSubmit(e) {
     e.preventDefault();
 
-    const params = this.state;
     const paramsErrors = this.getParamsErrors();
     const hasErrors = Object.values(paramsErrors).some(e => e);
 
-    if (hasErrors) {
-      const stateWithNewErrors = updateErrorsInParams(params, paramsErrors);
-      this.setState(stateWithNewErrors);
-    } else {
+    if (!hasErrors) {
       const fieldsParams = this.state;
       this.props.onAdd(fieldsParams);
     }
@@ -124,16 +124,6 @@ const fieldTypesOptions = fieldTypes.map(fieldType => ({
   id: fieldType,
   value: fieldType,
 }));
-
-const updateErrorsInParams = (params, paramsErrors) =>
-  Object.keys(paramsErrors).reduce(
-    (acc, paramName) => ({
-      ...acc,
-      [paramName]: {
-        ...params[paramName],
-        error: paramsErrors[paramName],
-      }
-    }), {});
 
 NewFieldSelection.propTypes = {
   isValidFieldParam: propTypes.func,
