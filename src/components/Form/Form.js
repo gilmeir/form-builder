@@ -5,10 +5,13 @@ import FormField from '../FormField/FormField';
 import Box from 'wix-style-react/Box';
 import Button from 'wix-style-react/Button';
 import styles from './Form.scss';
+import ReCAPTCHA from 'react-google-recaptcha';
+import { captchaSiteKey } from './helpers';
 
 class Form extends React.Component {
   state = {
     values: {},
+    captchaVerified: false,
   };
 
   handleSubmit(e) {
@@ -17,10 +20,20 @@ class Form extends React.Component {
     const {
       onSubmit,
       formId,
+      useCaptcha,
     } = this.props;
-    const { values } = this.state;
 
-    return onSubmit(formId, values);
+    const {
+      values,
+      captchaVerified,
+    } = this.state;
+
+    if (!useCaptcha) {
+      onSubmit(formId, values);
+    } else if (useCaptcha && captchaVerified) {
+      const captchaToken = this.recaptchaRef.getValue();
+      onSubmit(formId, values, captchaToken);
+    }
   }
 
   shouldShowSubmitButton() {
@@ -43,8 +56,15 @@ class Form extends React.Component {
     });
   }
 
+  onCaptchaSuccess = () => {
+    this.setState({captchaVerified: true});
+  };
+
   render() {
-    const { fields } = this.props;
+    const {
+      fields,
+      useCaptcha,
+    } = this.props;
 
     return (
       <Box width="100%">
@@ -64,6 +84,16 @@ class Form extends React.Component {
               </div>
             })
           }
+
+          {
+            useCaptcha && this.shouldShowSubmitButton() &&
+              <ReCAPTCHA
+                sitekey={captchaSiteKey}
+                onChange={this.onCaptchaSuccess}
+                ref={element => this.recaptchaRef = element}
+              />
+          }
+
           {
             this.shouldShowSubmitButton() && (
               <Box align="center" marginTop="15px">
@@ -81,9 +111,11 @@ class Form extends React.Component {
 
 Form.defaultProps = {
   fields: [],
+  useCaptcha: false,
 };
 
 Form.propTypes = {
+  useCaptcha: propTypes.bool,
   onSubmit: propTypes.func,
   formId: propTypes.string,
   fields: propTypes.arrayOf(

@@ -24,10 +24,11 @@ class FormSubmit extends React.Component {
     } = this.props;
 
     getFormFields(formId)
-      .then(({name, fields}) =>
+      .then(({name, fields, useCaptcha}) =>
         this.setState({
           name,
           fields,
+          useCaptcha,
           loading: false,
         }))
       .catch(() =>
@@ -40,13 +41,13 @@ class FormSubmit extends React.Component {
     this.setState({loading: true});
   }
 
-  handleSubmit(formId, values) {
+  handleSubmit(formId, values, captchaToken) {
     const {
       onSubmit,
       redirectTo,
     } = this.props;
 
-    onSubmit(formId, values)
+    onSubmit(formId, values, captchaToken)
       .then(() => redirectTo(routes.list));
   }
 
@@ -56,6 +57,7 @@ class FormSubmit extends React.Component {
     const {
       name,
       fields,
+      useCaptcha,
       loading,
       error,
     } = this.state;
@@ -81,6 +83,7 @@ class FormSubmit extends React.Component {
                     formId={formId}
                     fields={fields}
                     onSubmit={(...args) => this.handleSubmit(...args)}
+                    useCaptcha={useCaptcha}
                   />
                 </Card.Content>
               </Card>

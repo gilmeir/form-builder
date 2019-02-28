@@ -9,7 +9,7 @@ const saveForm = formData => backend.post('/api/forms/', formData).then(extractD
 const getForms = () => backend.get('/api/forms').then(extractData);
 const getForm = formId => backend.get(`/api/forms/${formId}`).then(extractData);
 
-const submitForm = (formId, formFields) => backend.post(`/api/submit/${formId}`, formFields).then(extractData);
+const submitForm = (formId, fields, captchaToken) => backend.post(`/api/submit/${formId}`, {fields, captchaToken}).then(extractData);
 
 const getFormSubmissions = formId => backend.get(`/api/submissions?formId=${formId}`).then(extractData);
 

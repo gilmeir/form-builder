@@ -3,10 +3,16 @@ import propTypes from 'prop-types';
 import Modal from 'wix-style-react/Modal';
 import { MessageBoxFunctionalLayout } from 'wix-style-react/MessageBox';
 import Input from 'wix-style-react/Input';
+import Checkbox from 'wix-style-react/Checkbox';
 
-class FormNameSelection extends React.Component {
+class FormBeforeSubmitModal extends React.Component {
   state = {
     name: '',
+    captchaSelected: false,
+  };
+
+  onCaptchaToggle = () => {
+    this.setState(({captchaSelected}) => ({captchaSelected: !captchaSelected}))
   };
 
   render() {
@@ -15,7 +21,11 @@ class FormNameSelection extends React.Component {
       onCancel,
       show,
     } = this.props;
-    const { name } = this.state;
+
+    const {
+      name,
+      captchaSelected,
+    } = this.state;
 
     return (
       <Modal
@@ -26,7 +36,7 @@ class FormNameSelection extends React.Component {
           title="Give This Form a Name"
           confirmText="Save"
           cancelText="Cancel"
-          onOk={() => onSave(name)}
+          onOk={() => onSave(name, captchaSelected)}
           onCancel={onCancel}
           onRequestClose={() => this.toggleNameSelectionModal()}
         >
@@ -36,16 +46,19 @@ class FormNameSelection extends React.Component {
             value={name}
             autoFocus
           />
+          <Checkbox checked={captchaSelected} onChange={this.onCaptchaToggle} style={{marginTop: 10}}>
+            Use Captcha
+          </Checkbox>
         </MessageBoxFunctionalLayout>
       </Modal>
     );
   }
 }
 
-FormNameSelection.propTypes = {
+FormBeforeSubmitModal.propTypes = {
   show: propTypes.bool,
   onSave: propTypes.func,
   onCancel: propTypes.func,
 };
 
-export default FormNameSelection;
+export default FormBeforeSubmitModal;

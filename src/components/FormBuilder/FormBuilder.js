@@ -11,7 +11,7 @@ import { isValidFieldParam } from './validations';
 import Form from '../Form/Form';
 import * as routes from '../../routes/routes';
 import styles from './FormBuilder.scss';
-import FormNameSelection from '../FormNameSelection/FormNameSelection';
+import FormBeforeSubmitModal from '../FormBeforeSubmitModal/FormBeforeSubmitModal';
 
 class FormBuilder extends React.Component {
   state = {
@@ -79,12 +79,13 @@ class FormBuilder extends React.Component {
     this.setState({showNewFieldSelection: false});
   }
 
-  onSave(formName) {
+  onSave(formName, useCaptcha) {
     const { formFields } = this.state;
     const { saveForm } = this.props;
 
     const formData = {
       name: formName,
+      useCaptcha,
       fields: formFields,
     };
 
@@ -184,9 +185,9 @@ class FormBuilder extends React.Component {
           </Card.Content>
         </Card>
 
-        <FormNameSelection
+        <FormBeforeSubmitModal
           show={showNameSelectionModal}
-          onSave={name => this.onSave(name)}
+          onSave={(...args) => this.onSave(...args)}
           onCancel={() => this.hideNameSelectionModal()}
         />
       </div>
