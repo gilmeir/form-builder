@@ -12,7 +12,7 @@ import * as routes from '../../routes/routes';
 class FormSubmissions extends React.Component {
   state = {
     submissions: [],
-    formName: '',
+    form: {},
     error: undefined,
     loading: false,
     dataLoaded: false,
@@ -34,7 +34,7 @@ class FormSubmissions extends React.Component {
         submissions,
         loading: false,
         dataLoaded: true,
-        formName: form.name,
+        form,
       }))
       .catch(() => this.setState({
         error: 'Failed retrieving your forms',
@@ -48,19 +48,24 @@ class FormSubmissions extends React.Component {
     const {
       submissions,
       dataLoaded,
-      formName,
+      form,
     } = this.state;
+
+    const {
+      name,
+      fields,
+    } = form;
 
     return (
       <Card>
-        <Card.Header title={`Submissions for ${formName}`}/>
+        <Card.Header title={`Submissions for '${name}'`}/>
         <Card.Content>
           {
             (dataLoaded && submissions.length > 0)
               ? <Table
                   data={submissions}
                   itemsPerPage={20}
-                  columns={generateColumns(submissions[0].values)}
+                  columns={generateColumns(fields)}
                 />
               : <EmptyState title={`There are no submissions yet for this form`} />
           }
@@ -106,10 +111,10 @@ class FormSubmissions extends React.Component {
   }
 }
 
-const generateColumns = submission => Object.keys(submission).map(fieldName => ({
-  title: fieldName,
+const generateColumns = formFields => formFields.map(({name}) => ({
+  title: name,
   align: 'center',
-  render: row => row.values[fieldName],
+  render: row => row.values[name],
 }));
 
 FormSubmissions.propTypes = {
